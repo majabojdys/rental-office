@@ -1,36 +1,14 @@
 package com.maja.rental.office.rentaloffice;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-
-@ExtendWith(SpringExtension.class)
-@SpringBootTest
-@AutoConfigureMockMvc
-public class RentalOfficeAdditionIntegrationTest {
-
-    @Autowired
-    private MockMvc mockMvc;
-
-    @Autowired
-    private ObjectMapper objectMapper;
-
-    @Autowired
-    private RentalOfficeRepository rentalOfficeRepository;
+public class RentalOfficeAdditionIntegrationTest extends IntegrationTest {
 
     @Test
-    public void testAdditionRentalOffice() throws Exception {
+    public void testAdditionRentalOffice() {
         //given
         String name = "biuro1";
         String countryCode = "PL";
@@ -40,12 +18,11 @@ public class RentalOfficeAdditionIntegrationTest {
         AddRentalOfficeDtoRequest request = new AddRentalOfficeDtoRequest(name, countryCode, city, street, number);
 
         //when
-        mockMvc.perform(MockMvcRequestBuilders.post("/rental-offices")
-                        .contentType("application/json")
-                        .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isOk());
+        ResponseEntity<Void> response = restTemplate.postForEntity(getLocalhost() + "/rental-offices", request, Void.class);
 
         //then
+        Assertions.assertEquals(response.getStatusCode(), HttpStatus.OK);
+
         RentalOffice rentalOffice = rentalOfficeRepository.findAll().get(0);
         Assertions.assertEquals(name, rentalOffice.getName());
         Assertions.assertEquals(countryCode, rentalOffice.getAddress().getCountryCode());
