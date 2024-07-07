@@ -19,4 +19,5 @@ public class RentalOfficeService {
         RentalOffice rentalOffice = new RentalOffice(address, addRentalOfficeDtoRequest.getName());
         rentalOfficeRepository.save(rentalOffice);
     }
+
 }

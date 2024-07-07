@@ -2,6 +2,8 @@ package com.maja.rental.office.rentaloffice;
 
 import jakarta.persistence.*;
 
+import java.util.Objects;
+
 @Entity
 @Table(name = "rental_office_addresses")
 public class RentalOfficeAddress {
@@ -45,4 +47,13 @@ public class RentalOfficeAddress {
     public Integer getNumber() {
         return number;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        RentalOfficeAddress address = (RentalOfficeAddress) o;
+        return Objects.equals(rentalOfficeId, address.rentalOfficeId) && Objects.equals(countryCode, address.countryCode) && Objects.equals(city, address.city) && Objects.equals(street, address.street) && Objects.equals(number, address.number);
+    }
+
 }
