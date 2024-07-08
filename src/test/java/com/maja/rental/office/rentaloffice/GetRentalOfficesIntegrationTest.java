@@ -1,14 +1,14 @@
 package com.maja.rental.office.rentaloffice;
 
+import com.maja.rental.office.IntegrationTest;
 import org.springframework.core.ParameterizedTypeReference;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.*;
 
-import java.net.URI;
 import java.util.List;
 
-public class GetRentalOfficesIntegrationTest extends IntegrationTest{
+public class GetRentalOfficesIntegrationTest extends IntegrationTest {
 
     @Test
     public void getRentalOffices(){

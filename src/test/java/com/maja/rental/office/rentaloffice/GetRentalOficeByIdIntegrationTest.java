@@ -1,11 +1,12 @@
 package com.maja.rental.office.rentaloffice;
 
+import com.maja.rental.office.IntegrationTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-public class GetRentalOficeByIdIntegrationTest extends IntegrationTest{
+public class GetRentalOficeByIdIntegrationTest extends IntegrationTest {
 
     @Test
     public void getRentalOfficeById() {
@@ -17,10 +18,10 @@ public class GetRentalOficeByIdIntegrationTest extends IntegrationTest{
         Integer number = 23;
         RentalOfficeAddress rentalOfficeAddress = new RentalOfficeAddress(countryCode, city, street, number);
         RentalOffice rentalOffice = new RentalOffice(rentalOfficeAddress, name);
-        rentalOfficeRepository.save(rentalOffice);
+        Long rentalOfficeId = rentalOfficeRepository.save(rentalOffice).getRentalOfficeId();
 
         //when
-        ResponseEntity<GetRentalOfficeDtoResponse> response = restTemplate.getForEntity(getLocalhost() + "/rental-offices/1", GetRentalOfficeDtoResponse.class);
+        ResponseEntity<GetRentalOfficeDtoResponse> response = restTemplate.getForEntity(getLocalhost() + "/rental-offices/" + rentalOfficeId, GetRentalOfficeDtoResponse.class);
 
         //then
         Assertions.assertEquals(response.getStatusCode(), HttpStatus.OK);

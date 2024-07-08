@@ -1,6 +1,8 @@
-package com.maja.rental.office.rentaloffice;
+package com.maja.rental.office;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.maja.rental.office.equipment.EquipmentRepository;
+import com.maja.rental.office.rentaloffice.RentalOfficeRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -18,10 +20,19 @@ public abstract class IntegrationTest {
     protected RentalOfficeRepository rentalOfficeRepository;
 
     @Autowired
+    protected EquipmentRepository equipmentRepository;
+
+    @Autowired
     protected TestRestTemplate restTemplate;
 
     @LocalServerPort
     protected int randomServerPort;
+
+    @BeforeEach
+    public void truncateDb(){
+        equipmentRepository.deleteAll();
+        rentalOfficeRepository.deleteAll();
+    }
 
     protected String getLocalhost(){
         return "http://localhost:" + randomServerPort;

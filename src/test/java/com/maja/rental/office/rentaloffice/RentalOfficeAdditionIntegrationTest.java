@@ -1,5 +1,6 @@
 package com.maja.rental.office.rentaloffice;
 
+import com.maja.rental.office.IntegrationTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
