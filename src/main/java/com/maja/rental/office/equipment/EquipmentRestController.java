@@ -22,7 +22,7 @@ public class EquipmentRestController {
 
 
     @GetMapping("/rental-offices/{rentalOfficeId}/equipments")
-    public List<EquipmentDtoResponse> findEquipmentByTypeAndSize (@PathVariable Long rentalOfficeId,
+    public EquipmentDtoResponse findEquipmentByTypeAndSize (@PathVariable Long rentalOfficeId,
                                                                   @RequestParam EquipmentType type,
                                                                   @RequestParam EquipmentSize size){
         return equipmentService.getEquipmentByTypeAndSizeAndRentalOfficeId(rentalOfficeId, type, size);

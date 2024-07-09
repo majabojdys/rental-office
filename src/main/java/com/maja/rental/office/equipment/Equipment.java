@@ -28,14 +28,17 @@ public class Equipment {
     @Column(name = "price_per_day")
     private Double pricePerDay;
 
+    private Integer quantity;
+
     public Equipment() {
     }
 
-    public Equipment(RentalOffice rentalOffice, EquipmentType type, EquipmentSize size, Double pricePerDay) {
+    public Equipment(RentalOffice rentalOffice, EquipmentType type, EquipmentSize size, Double pricePerDay, Integer quantity) {
         this.rentalOffice = rentalOffice;
         this.type = type;
         this.size = size;
         this.pricePerDay = pricePerDay;
+        this.quantity = quantity;
     }
 
     public Long getEquipmentId() {
@@ -58,12 +61,16 @@ public class Equipment {
         return pricePerDay;
     }
 
+    public Integer getQuantity() {
+        return quantity;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Equipment equipment = (Equipment) o;
-        return Objects.equals(equipmentId, equipment.equipmentId) && Objects.equals(rentalOffice, equipment.rentalOffice) && type == equipment.type && size == equipment.size && Objects.equals(pricePerDay, equipment.pricePerDay);
+        return Objects.equals(equipmentId, equipment.equipmentId) && Objects.equals(rentalOffice, equipment.rentalOffice) && type == equipment.type && size == equipment.size && Objects.equals(pricePerDay, equipment.pricePerDay) && Objects.equals(quantity, equipment.quantity);
     }
 
 }

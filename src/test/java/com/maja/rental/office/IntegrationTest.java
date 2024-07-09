@@ -3,6 +3,7 @@ package com.maja.rental.office;
 import com.maja.rental.office.customers.CustomerRepository;
 import com.maja.rental.office.equipment.EquipmentRepository;
 import com.maja.rental.office.rentaloffice.RentalOfficeRepository;
+import com.maja.rental.office.rentals.RentalRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,8 +33,12 @@ public abstract class IntegrationTest {
     @Autowired
     protected CustomerRepository customerRepository;
 
+    @Autowired
+    protected RentalRepository rentalRepository;
+
     @BeforeEach
     public void truncateDb(){
+        rentalRepository.deleteAll();
         equipmentRepository.deleteAll();
         rentalOfficeRepository.deleteAll();
         customerRepository.deleteAll();

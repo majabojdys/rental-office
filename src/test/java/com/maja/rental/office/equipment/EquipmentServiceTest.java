@@ -24,16 +24,17 @@ public class EquipmentServiceTest {
         EquipmentSize size = EquipmentSize.M;
         Double pricePerDay = 15.00;
         Long id = 1L;
+        Integer quantity = 2;
         RentalOfficeAddress rentalOfficeAddress = new RentalOfficeAddress("Pl", "Warszawa", "Wolności",28);
         RentalOffice rentalOffice = new RentalOffice(rentalOfficeAddress, "biuro8");
-        EquipmentDtoRequest equipmentDtoRequest = new EquipmentDtoRequest(type, size, pricePerDay);
+        EquipmentDtoRequest equipmentDtoRequest = new EquipmentDtoRequest(type, size, pricePerDay, quantity);
         Mockito.when(rentalOfficeRepository.findById(id)).thenReturn(Optional.of(rentalOffice));
 
         //when
         equipmentService.addEquipment(equipmentDtoRequest, id);
 
         //then
-        Equipment equipment = new Equipment(rentalOffice, type, size, pricePerDay);
+        Equipment equipment = new Equipment(rentalOffice, type, size, pricePerDay, quantity);
         Mockito.verify(equipmentRepository).save(equipment);
     }
 
@@ -44,19 +45,21 @@ public class EquipmentServiceTest {
         EquipmentType type = EquipmentType.SKIS;
         EquipmentSize size = EquipmentSize.M;
         Double pricePerDay = 15.00;
+        Integer quantity = 2;
         RentalOfficeAddress rentalOfficeAddress = new RentalOfficeAddress("Pl", "Warszawa", "Wolności",28);
         RentalOffice rentalOffice = new RentalOffice(rentalOfficeAddress, "biuro8");
-        Equipment equipment = new Equipment(rentalOffice, type, size, pricePerDay);
-        Mockito.when(equipmentRepository.findAllByTypeAndSizeAndRentalOfficeId(type, size, 1L)).thenReturn(List.of(equipment));
+        Equipment equipment = new Equipment(rentalOffice, type, size, pricePerDay, quantity);
+        Mockito.when(equipmentRepository.findByTypeAndSizeAndRentalOfficeId(type, size, 1L)).thenReturn(Optional.of(equipment));
 
         //when
-        List<EquipmentDtoResponse> responses = equipmentService.getEquipmentByTypeAndSizeAndRentalOfficeId(1L, type, size);
+        EquipmentDtoResponse response = equipmentService.getEquipmentByTypeAndSizeAndRentalOfficeId(1L, type, size);
 
         //then
-        Assertions.assertEquals(type, responses.get(0).getType());
-        Assertions.assertEquals(size, responses.get(0).getSize());
-        Assertions.assertEquals(pricePerDay, responses.get(0).getPricePerDay());
-        Assertions.assertEquals("biuro8", responses.get(0).getRentalOfficeName());
+        Assertions.assertEquals(type, response.getType());
+        Assertions.assertEquals(size, response.getSize());
+        Assertions.assertEquals(pricePerDay, response.getPricePerDay());
+        Assertions.assertEquals(quantity, response.getQuantity());
+        Assertions.assertEquals("biuro8", response.getRentalOfficeName());
     }
 
 }

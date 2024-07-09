@@ -23,20 +23,18 @@ public class EquipmentService {
         Equipment equipment = new Equipment(rentalOffice,
                 equipmentDtoRequest.getType(),
                 equipmentDtoRequest.getSize(),
-                equipmentDtoRequest.getPricePerDay());
+                equipmentDtoRequest.getPricePerDay(),
+                equipmentDtoRequest.getQuantity());
         equipmentRepository.save(equipment);
     }
 
-    public List<EquipmentDtoResponse> getEquipmentByTypeAndSizeAndRentalOfficeId(Long rentalOfficeId, EquipmentType type, EquipmentSize size){
-
-       return equipmentRepository.findAllByTypeAndSizeAndRentalOfficeId(type, size, rentalOfficeId).stream()
-               .map(e -> new EquipmentDtoResponse(e.getRentalOffice().getRentalOfficeId(),
-                       e.getRentalOffice().getName(),
-                       e.getType(),
-                       e.getSize(),
-                       e.getPricePerDay()))
-               .toList();
+    public EquipmentDtoResponse getEquipmentByTypeAndSizeAndRentalOfficeId(Long rentalOfficeId, EquipmentType type, EquipmentSize size){
+        Equipment equipment = equipmentRepository.findByTypeAndSizeAndRentalOfficeId(type, size, rentalOfficeId).get();
+        return new EquipmentDtoResponse(equipment.getRentalOffice().getRentalOfficeId(),
+                equipment.getRentalOffice().getName(),
+                equipment.getType(),
+                equipment.getSize(),
+                equipment.getPricePerDay(),
+                equipment.getQuantity());
     }
-
-
 }

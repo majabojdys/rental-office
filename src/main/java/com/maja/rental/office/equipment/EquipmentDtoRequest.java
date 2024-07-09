@@ -7,11 +7,13 @@ public class EquipmentDtoRequest {
     private EquipmentType type;
     private EquipmentSize size;
     private Double pricePerDay;
+    private Integer quantity;
 
-    public EquipmentDtoRequest(EquipmentType type, EquipmentSize size, Double pricePerDay) {
+    public EquipmentDtoRequest(EquipmentType type, EquipmentSize size, Double pricePerDay, Integer quantity) {
         this.type = type;
         this.size = size;
         this.pricePerDay = pricePerDay;
+        this.quantity = quantity;
     }
 
     public EquipmentType getType() {
@@ -25,4 +27,9 @@ public class EquipmentDtoRequest {
     public Double getPricePerDay() {
         return pricePerDay;
     }
+
+    public Integer getQuantity() {
+        return quantity;
+    }
+
 }

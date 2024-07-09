@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class CustomerRestController {
 
-    CustomerService customerService;
+    private CustomerService customerService;
 
     public CustomerRestController(CustomerService customerService) {
         this.customerService = customerService;

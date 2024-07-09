@@ -8,8 +8,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import java.math.BigDecimal;
-
 public class AddEquipmentIntegrationTest extends IntegrationTest {
 
     @Test
@@ -18,7 +16,8 @@ public class AddEquipmentIntegrationTest extends IntegrationTest {
         EquipmentType type = EquipmentType.SKIS;
         EquipmentSize size = EquipmentSize.L;
         Double price = 10.00;
-        EquipmentDtoRequest request = new EquipmentDtoRequest(type, size, price);
+        Integer quantity = 2;
+        EquipmentDtoRequest request = new EquipmentDtoRequest(type, size, price, quantity);
         RentalOfficeAddress rentalOfficeAddress = new RentalOfficeAddress("PL", "Katowice", "Zwycięstwa",45);
         RentalOffice rentalOffice = new RentalOffice(rentalOfficeAddress, "nazwa3");
         Long rentalOfficeId = rentalOfficeRepository.save(rentalOffice).getRentalOfficeId();
@@ -33,6 +32,7 @@ public class AddEquipmentIntegrationTest extends IntegrationTest {
         Assertions.assertEquals(type, equipment.getType());
         Assertions.assertEquals(size, equipment.getSize());
         Assertions.assertEquals(price, equipment.getPricePerDay());
+        Assertions.assertEquals(quantity, equipment.getQuantity());
         Assertions.assertEquals(rentalOffice, equipment.getRentalOffice());
     }
 }
