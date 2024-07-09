@@ -65,6 +65,10 @@ public class Equipment {
         return quantity;
     }
 
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -1,0 +1,41 @@
+package com.maja.rental.office.rentals;
+
+import com.maja.rental.office.customers.Customer;
+import com.maja.rental.office.equipment.Equipment;
+import com.maja.rental.office.equipment.EquipmentRepository;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+@Service
+public class RentEquipmentService {
+
+    private RentalRepository rentalRepository;
+    private EquipmentRepository equipmentRepository;
+
+    public RentEquipmentService(RentalRepository rentalRepository, EquipmentRepository equipmentRepository) {
+        this.rentalRepository = rentalRepository;
+        this.equipmentRepository = equipmentRepository;
+    }
+
+    @Transactional
+    public void rentEquipmentAndAdjustQuantity(List<RentalDtoRequest> rentalDtoRequest, Customer customer){
+        List<Equipment> equipments = rentalDtoRequest.stream()
+                .map(request -> {
+                    Equipment equipment = equipmentRepository.findByTypeAndSizeAndRentalOfficeId(request.getType(),
+                        request.getSize(),
+                        request.getRentalOfficeId()).get();
+                    if(equipment.getQuantity() >= request.getQuantity()){
+                        equipment.setQuantity(equipment.getQuantity() - request.getQuantity());
+                    } else {
+                        throw new RuntimeException();
+                    }
+                    return equipment;
+                })
+                .toList();
+        Rental rental = new Rental(LocalDateTime.now(), null, customer, equipments);
+        rentalRepository.save(rental);
+    }
+}

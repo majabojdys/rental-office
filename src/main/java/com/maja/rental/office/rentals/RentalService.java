@@ -12,24 +12,16 @@ import java.util.List;
 @Service
 public class RentalService {
 
-    private RentalRepository rentalRepository;
     private CustomerRepository customerRepository;
-    private EquipmentRepository equipmentRepository;
+    private RentEquipmentService rentEquipmentService;
 
-    public RentalService(RentalRepository rentalRepository, CustomerRepository customerRepository, EquipmentRepository equipmentRepository) {
-        this.rentalRepository = rentalRepository;
+    public RentalService(CustomerRepository customerRepository, RentEquipmentService rentEquipmentService) {
         this.customerRepository = customerRepository;
-        this.equipmentRepository = equipmentRepository;
+        this.rentEquipmentService = rentEquipmentService;
     }
 
     public void createRental(List<RentalDtoRequest> rentalDtoRequest, Long customerId){
         Customer customer = customerRepository.findByPesel(customerId).get();
-        List<Equipment> equipments = rentalDtoRequest.stream()
-                .map(request -> equipmentRepository.findByTypeAndSizeAndRentalOfficeId(request.getType(),
-                            request.getSize(),
-                            request.getRentalOfficeId()).get())
-                .toList();
-        Rental rental = new Rental(LocalDateTime.now(), null, customer, equipments);
-        rentalRepository.save(rental);
+        rentEquipmentService.rentEquipmentAndAdjustQuantity(rentalDtoRequest, customer);
     }
 }
