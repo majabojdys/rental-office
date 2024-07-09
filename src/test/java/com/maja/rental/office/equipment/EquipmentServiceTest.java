@@ -23,18 +23,18 @@ public class EquipmentServiceTest {
         EquipmentType type = EquipmentType.SKIS;
         EquipmentSize size = EquipmentSize.M;
         Double pricePerDay = 15.00;
+        Long id = 1L;
         RentalOfficeAddress rentalOfficeAddress = new RentalOfficeAddress("Pl", "Warszawa", "Wolności",28);
         RentalOffice rentalOffice = new RentalOffice(rentalOfficeAddress, "biuro8");
         EquipmentDtoRequest equipmentDtoRequest = new EquipmentDtoRequest(type, size, pricePerDay);
-        Mockito.when(rentalOfficeRepository.findById(1L)).thenReturn(Optional.of(rentalOffice));
+        Mockito.when(rentalOfficeRepository.findById(id)).thenReturn(Optional.of(rentalOffice));
 
         //when
-        equipmentService.addEquipment(equipmentDtoRequest, 1L);
+        equipmentService.addEquipment(equipmentDtoRequest, id);
 
         //then
         Equipment equipment = new Equipment(rentalOffice, type, size, pricePerDay);
         Mockito.verify(equipmentRepository).save(equipment);
-
     }
 
 

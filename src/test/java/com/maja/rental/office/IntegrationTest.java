@@ -1,5 +1,6 @@
 package com.maja.rental.office;
 
+import com.maja.rental.office.customers.CustomerRepository;
 import com.maja.rental.office.equipment.EquipmentRepository;
 import com.maja.rental.office.rentaloffice.RentalOfficeRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,10 +29,14 @@ public abstract class IntegrationTest {
     @LocalServerPort
     protected int randomServerPort;
 
+    @Autowired
+    protected CustomerRepository customerRepository;
+
     @BeforeEach
     public void truncateDb(){
         equipmentRepository.deleteAll();
         rentalOfficeRepository.deleteAll();
+        customerRepository.deleteAll();
     }
 
     protected String getLocalhost(){
