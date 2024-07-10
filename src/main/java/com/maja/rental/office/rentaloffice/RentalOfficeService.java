@@ -33,7 +33,7 @@ public class RentalOfficeService {
     }
 
     public GetRentalOfficeDtoResponse getRentalOfficeById(Long id){
-        RentalOffice rentalOffice = rentalOfficeRepository.findById(id).get();
+        RentalOffice rentalOffice = rentalOfficeRepository.findById(id).orElseThrow(() -> new RentalOfficeNotFountException());
         return new GetRentalOfficeDtoResponse(rentalOffice.getName(),
                 rentalOffice.getAddress().getCountryCode(),
                 rentalOffice.getAddress().getCity(),

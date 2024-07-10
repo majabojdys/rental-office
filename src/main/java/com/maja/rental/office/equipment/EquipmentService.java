@@ -1,6 +1,7 @@
 package com.maja.rental.office.equipment;
 
 import com.maja.rental.office.rentaloffice.RentalOffice;
+import com.maja.rental.office.rentaloffice.RentalOfficeNotFountException;
 import com.maja.rental.office.rentaloffice.RentalOfficeRepository;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +20,7 @@ public class EquipmentService {
     }
 
     public void addEquipment(EquipmentDtoRequest equipmentDtoRequest, Long rentalOfficeId){
-        RentalOffice rentalOffice = rentalOfficeRepository.findById(rentalOfficeId).get();
+        RentalOffice rentalOffice = rentalOfficeRepository.findById(rentalOfficeId).orElseThrow(() -> new RentalOfficeNotFountException());
         Equipment equipment = new Equipment(rentalOffice,
                 equipmentDtoRequest.getType(),
                 equipmentDtoRequest.getSize(),
@@ -29,7 +30,7 @@ public class EquipmentService {
     }
 
     public EquipmentDtoResponse getEquipmentByTypeAndSizeAndRentalOfficeId(Long rentalOfficeId, EquipmentType type, EquipmentSize size){
-        Equipment equipment = equipmentRepository.findByTypeAndSizeAndRentalOfficeId(type, size, rentalOfficeId).get();
+        Equipment equipment = equipmentRepository.findByTypeAndSizeAndRentalOfficeId(type, size, rentalOfficeId).orElseThrow(() -> new EquipmentNotFoundException("nie znaleziono sprzętu: " + type + ",o rozmiarze: " + size + ",w lokalizacji: " + rentalOfficeId));
         return new EquipmentDtoResponse(equipment.getRentalOffice().getRentalOfficeId(),
                 equipment.getRentalOffice().getName(),
                 equipment.getType(),

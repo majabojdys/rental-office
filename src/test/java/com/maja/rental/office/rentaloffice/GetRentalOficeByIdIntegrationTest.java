@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 public class GetRentalOficeByIdIntegrationTest extends IntegrationTest {
 
     @Test
-    public void getRentalOfficeById() {
+    public void getRentalOfficeByIdTest() {
         //given
         String name = "biuro1";
         String countryCode = "PL";
@@ -31,6 +31,17 @@ public class GetRentalOficeByIdIntegrationTest extends IntegrationTest {
         Assertions.assertEquals(city, response.getBody().getCity());
         Assertions.assertEquals(street, response.getBody().getStreet());
         Assertions.assertEquals(number, response.getBody().getNumber());
+    }
+
+    @Test
+    public void rentalOfficeNotFoundExceptionTest() {
+        //given
+
+        //when
+        ResponseEntity<String> response = restTemplate.getForEntity(getLocalhost() + "/rental-offices/1", String.class);
+
+        //then
+        Assertions.assertEquals(response.getStatusCode(), HttpStatus.NOT_FOUND);
 
     }
 }

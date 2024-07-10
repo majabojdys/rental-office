@@ -40,4 +40,17 @@ public class GetEquipmentIntegrationTest extends IntegrationTest {
         Assertions.assertEquals(quantity, response.getBody().getQuantity());
         Assertions.assertEquals(1L, response.getBody().getRentalOfficeId());
     }
+
+    @Test
+    public void equipmentNotFoundTest(){
+        //given
+
+        //when
+        ResponseEntity<String> response = restTemplate.getForEntity(getLocalhost() + "/rental-offices/1/equipments?type=SKIS&size=L", String.class);
+
+        //then
+        Assertions.assertEquals(response.getStatusCode(), HttpStatus.NOT_FOUND);
+
+        Assertions.assertEquals(response.getBody(), "nie znaleziono sprzętu: SKIS,o rozmiarze: L,w lokalizacji: 1");
+    }
 }

@@ -31,4 +31,18 @@ public class GetCustomerIntegrationTest extends IntegrationTest {
         Assertions.assertEquals(firstName, response.getBody().getFirstName());
         Assertions.assertEquals(lastName, response.getBody().getLastName());
     }
+
+    @Test
+    public void testCustomerNotFound(){
+        //given
+        Long pesel = 123L;
+
+        //when
+        ResponseEntity<String> response = restTemplate.getForEntity(getLocalhost() + "/customers/" + pesel, String.class);
+
+        //then
+        Assertions.assertEquals(response.getStatusCode(), HttpStatus.NOT_FOUND);
+
+        Assertions.assertEquals(response.getBody(), "nie mam w bazie klienta o takim numerze pesel");
+    }
 }

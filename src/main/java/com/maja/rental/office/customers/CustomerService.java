@@ -23,7 +23,7 @@ public class CustomerService {
     }
 
     public CustomerDtoResponse getCustomerByPesel(Long pesel){
-        Customer customer = customerRepository.findByPesel(pesel).get();
+        Customer customer = customerRepository.findByPesel(pesel).orElseThrow(()-> new CustomerNotFoundException()) ;
         Optional<Rental> notReturnedRental = customer.getRentals().stream()
                 .filter(r -> r.getReturnedAt().equals(Optional.empty()))
                 .findFirst();

@@ -1,6 +1,7 @@
 package com.maja.rental.office.rentals;
 
 import com.maja.rental.office.customers.Customer;
+import com.maja.rental.office.customers.CustomerNotFoundException;
 import com.maja.rental.office.customers.CustomerRepository;
 import com.maja.rental.office.equipment.Equipment;
 import com.maja.rental.office.equipment.EquipmentRepository;
@@ -21,7 +22,7 @@ public class RentalService {
     }
 
     public void createRental(List<RentalDtoRequest> rentalDtoRequest, Long customerId){
-        Customer customer = customerRepository.findByPesel(customerId).get();
+        Customer customer = customerRepository.findByPesel(customerId).orElseThrow(()-> new CustomerNotFoundException());
         rentEquipmentService.rentEquipmentAndAdjustQuantity(rentalDtoRequest, customer);
     }
 }

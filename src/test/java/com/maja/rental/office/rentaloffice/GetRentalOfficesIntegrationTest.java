@@ -11,7 +11,7 @@ import java.util.List;
 public class GetRentalOfficesIntegrationTest extends IntegrationTest {
 
     @Test
-    public void getRentalOffices(){
+    public void getRentalOfficesTest(){
         //given
         String name = "biuro1";
         String countryCode = "PL";

@@ -2,6 +2,7 @@ package com.maja.rental.office.rentals;
 
 import com.maja.rental.office.customers.Customer;
 import com.maja.rental.office.equipment.Equipment;
+import com.maja.rental.office.equipment.EquipmentNotFoundException;
 import com.maja.rental.office.equipment.EquipmentRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,7 +27,7 @@ public class RentEquipmentService {
                 .map(request -> {
                     Equipment equipment = equipmentRepository.findByTypeAndSizeAndRentalOfficeId(request.getType(),
                         request.getSize(),
-                        request.getRentalOfficeId()).get();
+                        request.getRentalOfficeId()).orElseThrow(()-> new EquipmentNotFoundException("nie znaleziono sprzętu:" + request.getType() + "o rozmiarze:" + request.getSize() + "w lokalizacji:" + request.getRentalOfficeId()));
                     if(equipment.getQuantity() >= request.getQuantity()){
                         equipment.setQuantity(equipment.getQuantity() - request.getQuantity());
                     } else {
