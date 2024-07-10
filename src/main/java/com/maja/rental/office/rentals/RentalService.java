@@ -25,4 +25,8 @@ public class RentalService {
         Customer customer = customerRepository.findByPesel(customerId).orElseThrow(()-> new CustomerNotFoundException());
         rentEquipmentService.rentEquipmentAndAdjustQuantity(rentalDtoRequest, customer);
     }
+
+    public void finishRental(Long rentalId){
+        rentEquipmentService.finishRentalAndAdjustEquipmentQuantity(rentalId);
+    }
 }

@@ -23,20 +23,31 @@ public class RentEquipmentService {
 
     @Transactional
     public void rentEquipmentAndAdjustQuantity(List<RentalDtoRequest> rentalDtoRequest, Customer customer){
-        List<Equipment> equipments = rentalDtoRequest.stream()
+        List<RentalStock> rentalStocks = rentalDtoRequest.stream()
                 .map(request -> {
                     Equipment equipment = equipmentRepository.findByTypeAndSizeAndRentalOfficeId(request.getType(),
-                        request.getSize(),
-                        request.getRentalOfficeId()).orElseThrow(()-> new EquipmentNotFoundException("nie znaleziono sprzętu:" + request.getType() + "o rozmiarze:" + request.getSize() + "w lokalizacji:" + request.getRentalOfficeId()));
+                            request.getSize(),
+                            request.getRentalOfficeId()).orElseThrow(()-> new EquipmentNotFoundException("nie znaleziono sprzętu:" + request.getType() + "o rozmiarze:" + request.getSize() + "w lokalizacji:" + request.getRentalOfficeId()));
                     if(equipment.getQuantity() >= request.getQuantity()){
                         equipment.setQuantity(equipment.getQuantity() - request.getQuantity());
                     } else {
                         throw new RuntimeException();
                     }
-                    return equipment;
+                    return new RentalStock(request.getQuantity(), equipment);
                 })
                 .toList();
-        Rental rental = new Rental(LocalDateTime.now(), null, customer, equipments);
+        Rental rental = new Rental(LocalDateTime.now(), null, customer, rentalStocks);
+        rentalRepository.save(rental);
+    }
+
+    @Transactional
+    public void finishRentalAndAdjustEquipmentQuantity(Long rentalId){
+        Rental rental = rentalRepository.findById(rentalId).orElseThrow(() -> new RentalNotFoundException());
+        rental.setReturnedAt(LocalDateTime.now());
+        rental.getRentalStocks().forEach(rentalStock -> {
+            Equipment equipment = rentalStock.getEquipment();
+            equipment.setQuantity(equipment.getQuantity() + rentalStock.getQuantity());
+        });
         rentalRepository.save(rental);
     }
 }

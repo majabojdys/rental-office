@@ -19,5 +19,8 @@ public class RentalRestController {
         rentalService.createRental(rentalDtoRequest, customerId);
     }
 
-
+    @PostMapping("/rentals/{rentalId}/finish")
+    public void finishRental(@PathVariable Long rentalId){
+        rentalService.finishRental(rentalId);
+    }
 }

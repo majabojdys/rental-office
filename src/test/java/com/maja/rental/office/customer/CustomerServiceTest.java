@@ -5,6 +5,7 @@ import com.maja.rental.office.equipment.Equipment;
 import com.maja.rental.office.equipment.EquipmentSize;
 import com.maja.rental.office.equipment.EquipmentType;
 import com.maja.rental.office.rentals.Rental;
+import com.maja.rental.office.rentals.RentalStock;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -42,11 +43,14 @@ public class CustomerServiceTest {
         String firstName = "Jan";
         String lastName = "Kowalski";
 
-        Equipment equipment = new Equipment(null, EquipmentType.SNOWBOARD, EquipmentSize.M, 5d, 1);
-        Equipment equipment2 = new Equipment(null, EquipmentType.SKIS, EquipmentSize.M, 10d, 1);
+        Equipment equipment = new Equipment(null, EquipmentType.SNOWBOARD, EquipmentSize.M, 5d, 5);
+        Equipment equipment2 = new Equipment(null, EquipmentType.SKIS, EquipmentSize.M, 10d, 5);
+
+        RentalStock rentalStock = new RentalStock(1, equipment);
+        RentalStock rentalStock2 = new RentalStock(1, equipment2);
 
         Customer customer = new Customer(pesel, firstName, lastName);
-        Rental rental = new Rental(LocalDateTime.now().minusDays(2), null, customer, List.of(equipment, equipment2));
+        Rental rental = new Rental(LocalDateTime.now().minusDays(2), null, customer, List.of(rentalStock, rentalStock2));
         customer.setRentals(List.of(rental));
 
         Mockito.when(customerRepository.findByPesel(pesel)).thenReturn(Optional.of(customer));

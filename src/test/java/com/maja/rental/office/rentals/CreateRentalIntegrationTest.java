@@ -44,7 +44,7 @@ public class CreateRentalIntegrationTest extends IntegrationTest {
 
         Rental rental = rentalRepository.findAll().get(0);
         Assertions.assertEquals(customer, rental.getCustomer());
-        Assertions.assertEquals(equipment.getEquipmentId(), rental.getEquipments().get(0).getEquipmentId());
-        Assertions.assertEquals(0, rental.getEquipments().get(0).getQuantity());
+        Assertions.assertEquals(equipment.getEquipmentId(), rental.getRentalStocks().get(0).getEquipment().getEquipmentId());
+        Assertions.assertEquals(0, rental.getRentalStocks().get(0).getEquipment().getQuantity());
     }
 }

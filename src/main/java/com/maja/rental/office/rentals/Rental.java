@@ -26,17 +26,19 @@ public class Rental {
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    private List<Equipment> equipments;
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "rental_stock_id")
+    private List<RentalStock> rentalStocks;
+
 
     public Rental() {
     }
 
-    public Rental(LocalDateTime rentedAt, LocalDateTime returnedAt, Customer customer, List<Equipment> equipments) {
+    public Rental(LocalDateTime rentedAt, LocalDateTime returnedAt, Customer customer, List<RentalStock> rentalStocks) {
         this.rentedAt = rentedAt;
         this.returnedAt = returnedAt;
         this.customer = customer;
-        this.equipments = equipments;
+        this.rentalStocks = rentalStocks;
     }
 
     public Long getId() {
@@ -55,7 +57,11 @@ public class Rental {
         return customer;
     }
 
-    public List<Equipment> getEquipments() {
-        return equipments;
+    public List<RentalStock> getRentalStocks() {
+        return rentalStocks;
+    }
+
+    public void setReturnedAt(LocalDateTime returnedAt) {
+        this.returnedAt = returnedAt;
     }
 }

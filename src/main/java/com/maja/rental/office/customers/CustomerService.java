@@ -17,21 +17,21 @@ public class CustomerService {
         this.customerRepository = customerRepository;
     }
 
-    public void addCustomer(CustomerDtoRequest customerDtoRequest){
+    public void addCustomer(CustomerDtoRequest customerDtoRequest) {
         Customer customer = new Customer(customerDtoRequest.getPesel(), customerDtoRequest.getFirstName(), customerDtoRequest.getLastName());
         customerRepository.save(customer);
     }
 
-    public CustomerDtoResponse getCustomerByPesel(Long pesel){
-        Customer customer = customerRepository.findByPesel(pesel).orElseThrow(()-> new CustomerNotFoundException()) ;
+    public CustomerDtoResponse getCustomerByPesel(Long pesel) {
+        Customer customer = customerRepository.findByPesel(pesel).orElseThrow(() -> new CustomerNotFoundException());
         Optional<Rental> notReturnedRental = customer.getRentals().stream()
                 .filter(r -> r.getReturnedAt().equals(Optional.empty()))
                 .findFirst();
 
         double charge = 0;
-        if(notReturnedRental.isPresent()){
-            charge = notReturnedRental.get().getEquipments().stream()
-                    .mapToDouble(e -> e.getPricePerDay() * Math.abs(Duration.between(LocalDateTime.now(), notReturnedRental.get().getRentedAt()).toDays()))
+        if (notReturnedRental.isPresent()) {
+            charge = notReturnedRental.get().getRentalStocks().stream()
+                    .mapToDouble(rentalStock -> rentalStock.getQuantity() * rentalStock.getEquipment().getPricePerDay() * Math.abs(Duration.between(LocalDateTime.now(), notReturnedRental.get().getRentedAt()).toDays()))
                     .sum();
         }
         return new CustomerDtoResponse(customer.getPesel(), customer.getFirstName(), customer.getLastName(), charge);
