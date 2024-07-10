@@ -19,3 +19,5 @@ Wykorzystane technologie w projekcie:
 - junit, mockito
 - wbudowana baza danych H2
 - maven
+
+![img.png](img.png)
