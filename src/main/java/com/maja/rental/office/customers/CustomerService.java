@@ -1,5 +1,6 @@
 package com.maja.rental.office.customers;
 
+import com.maja.rental.office.nbp.NbpService;
 import com.maja.rental.office.rentals.Rental;
 import org.springframework.stereotype.Service;
 
@@ -12,9 +13,11 @@ import java.util.Optional;
 public class CustomerService {
 
     private CustomerRepository customerRepository;
+    private NbpService nbpService;
 
-    public CustomerService(CustomerRepository customerRepository) {
+    public CustomerService(CustomerRepository customerRepository, NbpService nbpService) {
         this.customerRepository = customerRepository;
+        this.nbpService = nbpService;
     }
 
     public void addCustomer(CustomerDtoRequest customerDtoRequest) {
@@ -34,7 +37,13 @@ public class CustomerService {
                     .mapToDouble(rentalStock -> rentalStock.getQuantity() * rentalStock.getEquipment().getPricePerDay() * Math.abs(Duration.between(LocalDateTime.now(), notReturnedRental.get().getRentedAt()).toDays()))
                     .sum();
         }
-        return new CustomerDtoResponse(customer.getPesel(), customer.getFirstName(), customer.getLastName(), charge);
+        Double chargeInEuro = null;
+        Optional<Double> rateInEuro = nbpService.getEuroRate();
+        if(rateInEuro.isPresent()){
+            chargeInEuro = rateInEuro.get() * charge;
+        }
+
+        return new CustomerDtoResponse(customer.getPesel(), customer.getFirstName(), customer.getLastName(), charge, chargeInEuro);
     }
 
 }

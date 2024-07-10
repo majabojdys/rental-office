@@ -4,6 +4,7 @@ import com.maja.rental.office.customers.*;
 import com.maja.rental.office.equipment.Equipment;
 import com.maja.rental.office.equipment.EquipmentSize;
 import com.maja.rental.office.equipment.EquipmentType;
+import com.maja.rental.office.nbp.NbpService;
 import com.maja.rental.office.rentals.Rental;
 import com.maja.rental.office.rentals.RentalStock;
 import org.junit.jupiter.api.Assertions;
@@ -18,7 +19,8 @@ import java.util.Optional;
 public class CustomerServiceTest {
 
     CustomerRepository customerRepository = Mockito.mock(CustomerRepository.class);
-    CustomerService customerService = new CustomerService(customerRepository);
+    NbpService nbpService = Mockito.mock(NbpService.class);
+    CustomerService customerService = new CustomerService(customerRepository, nbpService);
 
     @Test
     public void testMappingCustomerAddition(){
@@ -54,6 +56,7 @@ public class CustomerServiceTest {
         customer.setRentals(List.of(rental));
 
         Mockito.when(customerRepository.findByPesel(pesel)).thenReturn(Optional.of(customer));
+        Mockito.when(nbpService.getEuroRate()).thenReturn(Optional.of(5.0));
 
         //when
         CustomerDtoResponse response = customerService.getCustomerByPesel(pesel);
@@ -63,6 +66,7 @@ public class CustomerServiceTest {
         Assertions.assertEquals(firstName, response.getFirstName());
         Assertions.assertEquals(lastName, response.getLastName());
         Assertions.assertEquals(30d, response.getCharge());
+        Assertions.assertEquals(150d, response.getChargeInEuro().get());
     }
 
 }
